@@ -300,6 +300,7 @@ int main( int argc, char *argv[] ){
       }
       // se guardan los cambios en una nueva imagen
       if ( FreeImage_Save( FIF_PNG, imagen, argv[2], PNG_Z_DEFAULT_COMPRESSION ) ) {
+         printf("%s\n", "entro o no?");
       }
    }
 

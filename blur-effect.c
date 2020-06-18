@@ -299,7 +299,7 @@ int main( int argc, char *argv[] ){
          bits2=bits;
       }
       // se guardan los cambios en una nueva imagen
-      if ( FreeImage_Save( FIF_PNG, imagen, argv[2], PNG_Z_DEFAULT_COMPRESSION ) ) {
+      if ( FreeImage_Save( FIF_PNG, imagen, argv[2], 0 ) ) {
       }
    }
 

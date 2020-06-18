@@ -1,0 +1,39 @@
+7 de abril de 2020
+Práctica 1 del curso de Computación Paralela y Distribuida
+Profesor: Cesar Augusto Pedraza
+Estudiantes: Vinnie Giuliano Mellizo Molina
+	     Julio Cesar Ovalle Lara
+Universidad Nacional de Colombia
+
+La siguiente es una implementación en C del algoritmo Box Blur. Consiste en modificar el valor de cada pixel
+para que éste sea el promedio aritmético de sus pixeles vecinos. El algoritmo más famoso y preciso para
+conseguir este efecto es el Gaussian Blur, sin embargo, su cálculo resulta costoso computacionalmente ya que
+requiere de la convolución de la imagen con una función gaussiana, en términos discretos los pesos de la función
+gaussiana son sólo significativos a cierta distancia, formando así la matriz kernel. Para aproximar el efecto del
+Gaussian Blur basta con aplicar consecutivamente un sencillo Box Blur, consiguiente resultados más que suficientes
+luego de la tercera repetición. La presente implementación, sin embargo, aplica el Box blur para una matriz kernel
+de tamaño variable, una sola vez.
+
+Para compilar:
+
+En Linux:	sudo apt-get update
+		sudo apt-get install libfreeimage-dev
+		gcc blur-effect.c -o blur-effect -lFreeImage -fopenmp
+
+Para ejecutar:	./blur-effect SourceImage.png OutputImage.png KernelSize CoreNum
+Donde:	SourceImage.png - imagen a la cual se aplicará el efecto blur.
+	OutputImage.png - nombre con que se guardará la imagen modificada.
+	KernelSize - número impar entre 3 y 15 que determina el tamaño del kernel.
+	CoreNum - número de hilos a utilizar para aplicar el efecto.
+
+Notas:
+1. El programa sólo recibe y escribe imágenes con extensión PNG.
+2. Sólo se aplica una vez el Box Blur, para aproximar el Gaussian Blur se deberá aplicar 3 veces consecutivas
+   sobre la misma imagen.
+3. Respecto al script script_ejecutar_todo.sh, este corre el programa para todas las combinaciones de acuerdo
+   a los siguientes parámetros y almacena el tiempo de ejecución para cada caso en un CSV:
+	- KernelSize: impares entre 3 y 15.
+	- CoreNum: {1, 2, 4, 8, 16}
+	- SourceImage.png: {720p.png, 1080p.png, 4k.png} 
+
+

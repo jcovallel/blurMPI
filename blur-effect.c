@@ -275,7 +275,7 @@ int main( int argc, char *argv[] ){
    BlurFuncY( params );
 
    if(rank+1==hilos){
-      MPI_Gather(to_send,total_height*3*(total_width-(block_width*(rank))),MPI_INT,to_rcv,total_width*3*(total_width-(block_width*(rank))),MPI_INT,0,MPI_COMM_WORLD);
+      MPI_Gather(to_send,total_height*3*(total_width-(block_width*(rank))),MPI_INT,to_rcv,total_height*3*(total_width-(block_width*(rank))),MPI_INT,0,MPI_COMM_WORLD);
    }else{
       MPI_Gather(to_send,total_height*block_width*3,MPI_INT,to_rcv,total_height*block_width*3,MPI_INT,0,MPI_COMM_WORLD);
    }

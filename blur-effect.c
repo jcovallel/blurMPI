@@ -250,6 +250,8 @@ int main( int argc, char *argv[] ){
 
    int *to_rcv = malloc(sizeof(int)*3*total_width*total_height);//rcv=3*total_width tosend=3*block_width
    int *to_send;
+   int *rcounts = malloc(hilos*sizeof(int));
+   int *displs = malloc(hilos*sizeof(int));
 
    struct Blur_Params *params = malloc( sizeof( struct Blur_Params ));
    params->img = imagen;
@@ -274,11 +276,24 @@ int main( int argc, char *argv[] ){
 
    BlurFuncY( params );
 
-   if(rank+1==hilos){
+   for (int i=0; i<hilos; i++) {
+      int bufsize;
+      if(i+1==hilos){
+         bufsize = total_height*3*(total_width-(block_width*(rank)));
+      }else{
+         bufsize = total_height*block_width*3;
+      }
+      rcounts[i] = bufsize;
+      displs[i] = i*total_height*block_width*3;
+   }
+   
+   MPI_Gatherv( to_send, rcounts[rank], MPI_INT, to_rcv, rcounts, displs, MPI_INT, 0, MPI_COMM_WORLD);
+
+   /*if(rank+1==hilos){
       MPI_Gather(to_send,total_height*3*(total_width-(block_width*(rank))),MPI_INT,to_rcv,total_height*3*(total_width-(block_width*(rank))),MPI_INT,0,MPI_COMM_WORLD);
    }else{
       MPI_Gather(to_send,total_height*block_width*3,MPI_INT,to_rcv,total_height*block_width*3,MPI_INT,0,MPI_COMM_WORLD);
-   }
+   }*/
 
    if(rank==0){
       BYTE *bits, *bits2 = (BYTE *)FreeImage_GetBits( imagen );
